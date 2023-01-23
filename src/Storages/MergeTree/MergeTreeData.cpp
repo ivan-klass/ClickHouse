@@ -6814,7 +6814,9 @@ QueryProcessingStage::Enum MergeTreeData::getQueryProcessingStage(
     if (query_context->getClientInfo().collaborate_with_initiator)
         return QueryProcessingStage::Enum::FetchColumns;
 
-    if (query_context->getSettingsRef().allow_experimental_parallel_reading_from_replicas && !query_context->getClientInfo().collaborate_with_initiator)
+    if (query_context->getSettingsRef().allow_experimental_parallel_reading_from_replicas
+        && !query_context->getClientInfo().collaborate_with_initiator
+        && to_stage >= QueryProcessingStage::WithMergeableState)
         return QueryProcessingStage::Enum::WithMergeableState;
 
     if (to_stage >= QueryProcessingStage::Enum::WithMergeableState)
